@@ -1,73 +1,51 @@
-[![Contributors][contributors-shield]][contributors-url]
-[![Forks][forks-shield]][forks-url]
-[![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
-[![MIT License][license-shield]][license-url]
-[![LinkedIn][linkedin-shield]][linkedin-url]
-
 ![React Templator Logo](https://i.imgur.com/3GT3syb.png)
 
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
 
-  <h3 align="center">React Templator/h3>
+  <h3 align="center">React Templator</h3>
 
   <p align="center">
-    project_description
-    <br />
-    <a href="https://github.com/github_username/repo_name"><strong>Explore the docs »</strong></a>
-    <br />
-    <br />
-    <a href="https://github.com/github_username/repo_name">View Demo</a>
-    ·
-    <a href="https://github.com/github_username/repo_name/issues">Report Bug</a>
-    ·
-    <a href="https://github.com/github_username/repo_name/issues">Request Feature</a>
-  </p>
+    A tiny 6kb library for form generation & validation in React & React Native
 </p>
-
-<!-- TABLE OF CONTENTS -->
-<details open="open">
-  <summary><h2 style="display: inline-block">Table of Contents</h2></summary>
-  <ol>
-    <li>
-      <a href="#about-the-project">About The Project</a>
-      <ul>
-        <li><a href="#built-with">Built With</a></li>
-      </ul>
-    </li>
-    <li>
-      <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
-      </ul>
-    </li>
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#contributing">Contributing</a></li>
-    <li><a href="#license">License</a></li>
-    <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgements">Acknowledgements</a></li>
-  </ol>
-</details>
 
 <!-- ABOUT THE PROJECT -->
 
-## About The Project
+## Justification
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
+Are you tired of doing this every time you want a nice, dynamic form in React?
 
-Here's a blank template to get started:
-**To avoid retyping too much info. Do a search and replace with your text editor for the following:**
-`github_username`, `repo_name`, `twitter_handle`, `email`, `project_title`, `project_description`
+```typescript
+const cityRef = useRef<TextInput>(null);
+const addressRef = useRef<TextInput>(null);
+const postcodeRef = useRef<TextInput>(null);
+const lastNameRef = useRef<TextInput>(null);
+const passwordRef = useRef<TextInput>(null);
+const firstNameRef = useRef<TextInput>(null);
+const studentEmailRef = useRef<TextInput>(null);
 
-### Built With
-
-- []()
-- []()
-- []()
+const [dob, setDob] = useState<string>('');
+const [city, setCity] = useState<string>('');
+const [address, setAdress] = useState<string>('');
+const [country, setCountry] = useState<string>('');
+const [postcode, setPostcode] = useState<string>('');
+const [lastName, setLastName] = useState<string>('');
+const [password, setPassword] = useState<string>('');
+const [firstName, setFirstName] = useState<string>('');
+const [university, setUniversity] = useState<string>('');
+const [gender, setGender] = useState<Gender | string>('');
+const [studentEmail, setStudentEmail] = useState<string>('');
+const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+const [isAgreedToTerms, setIsAgreedToTerms] = useState<boolean>(false);
+const [isAgreedToPrivacyPolicy, setIsAgreedToPrivacyPolicy] = useState<boolean>(
+  false
+);
+const [
+  isPersonalizedEmailOptIn,
+  setIsPersonalizedEmailOptIn
+] = useState<boolean>(false);
+```
 
 <!-- GETTING STARTED -->
 
@@ -86,20 +64,114 @@ This is an example of how to list things you need to use the software and how to
 
 ### Installation
 
-1. Clone the repo
-   ```sh
-   git clone https://github.com/github_username/repo_name.git
-   ```
-2. Install NPM packages
-   ```sh
-   npm install
-   ```
+#### NPM
+
+    ```
+    npm install react-templator
+    ```
+
+#### Yarn
+
+    ```
+    yarn add react-templator
+    ```
 
 <!-- USAGE EXAMPLES -->
 
 ## Usage
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+You first need to register your input components so React Templator knows about them. You can do this by calling `registerElements` which accepts an object of type/render pairs. In this example, we will register a regular input and a submit button. These examples use HTML but they can be your own components.
+
+```javascript
+registerElements({
+  'text-input': ({
+    name,
+    label,
+    tabIndex,
+    error,
+    ref,
+    value,
+    onChange,
+    validate
+  }) => (
+    <div>
+      {yourProp} {label}
+      <input
+        type='text'
+        name={name}
+        tabIndex={tabIndex}
+        ref={ref}
+        onChange={(event) => {
+          onChange(event.currentTarget.value);
+        }}
+        onBlur={() => validate(false)}
+      />
+      {error}
+    </div>
+  ),
+  submit: ({
+    name,
+    label,
+    tabIndex,
+    error,
+    ref,
+    value,
+    onChange,
+    validate
+  }) => <input type='submit' />
+});
+```
+
+Now we've registered our elements, we can create a form schema which defines the inputs in our form.
+
+```javascript
+const schema: IFormSchema = [
+  {
+    // Required fields
+    type: 'text-input',
+    name: 'first_name',
+    label: 'First name',
+
+    // Additional fields (these are dynamically passed to your component and can be anything)
+    yourProp: 'A field: ',
+
+    // Validators
+    required: true,
+    minLength: 2,
+    maxLength: 50
+  },
+  {
+    type: 'text-input',
+    name: 'last_name',
+    label: 'Last name',
+
+    yourProp: 'Another: ',
+
+    required: true
+  },
+  {
+    type: 'submit',
+    name: 'submit'
+  }
+];
+```
+
+Lastly, now your form is defined, you need to use the `<Form/>` component to generate your form!
+
+```
+<Form
+	schema={schema}
+    onSubmit={(
+       	data: Record<string, any>,
+        setErrors: (errors: Record<string, string>) => void
+    ) => {
+    	// This is called when the form has submitted and all the local validation has passed
+        alert("Form submitted! Data:", JSON.stringify(data));
+    }}
+ />
+```
+
+This is the result of our example:
 
 _For more examples, please refer to the [Documentation](https://example.com)_
 

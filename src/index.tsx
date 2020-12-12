@@ -1,13 +1,18 @@
 import React from 'react';
 import { View } from 'react-native';
 import {
-  Templator,
-  IForm,
   IElementSchema,
-  ILayoutSchema,
   IFormSchema,
+  ILayoutSchema,
+  IForm
+} from './interfaces';
+
+import {
+  Templator,
   registerElement,
-  registerLayoutElement
+  registerLayoutElement,
+  registerElements,
+  registerLayoutElements
 } from './templator';
 
 export function Form({ schema, onSubmit, dynamicProps, ...props }: IForm) {
@@ -46,4 +51,9 @@ export function NativeForm({
 }
 
 export type { IElementSchema, ILayoutSchema, IFormSchema };
-export { registerElement, registerLayoutElement };
+export {
+  registerElement,
+  registerLayoutElement,
+  registerElements,
+  registerLayoutElements
+};

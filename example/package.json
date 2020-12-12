@@ -22,6 +22,7 @@
     "react": "link:../node_modules/react",
     "react-dom": "link:../node_modules/react-dom",
     "react-form-templator": "https://github.com/uen/react-form-templator",
+    "react-native": "^0.63.4",
     "react-scripts": "link:../node_modules/react-scripts",
     "typescript": "link:../node_modules/typescript"
   },

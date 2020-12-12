@@ -9,16 +9,14 @@ import React, {
 } from 'react';
 
 import {
+  IElementProps,
   IElementSchema,
   IForm,
   IFormSchema,
   ILayoutSchema
 } from './interfaces';
-import { validators } from './validators';
 
-interface IElementProps {
-  [data: string]: any;
-}
+import { validators } from './validators';
 
 const elements: Record<string, (props: IElementProps) => ReactElement> = {};
 
@@ -217,7 +215,7 @@ interface IRegisterElements {
 }
 
 export function registerElements({ elements }: IRegisterElements) {
-  for (let name of Object.keys(elements)) {
+  for (const name of Object.keys(elements)) {
     registerElement(name, elements[name]);
   }
 }

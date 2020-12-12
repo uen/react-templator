@@ -6,6 +6,10 @@ export interface IElementSchema {
   [data: string]: any;
 }
 
+export interface IElementProps {
+  [data: string]: any;
+}
+
 export interface ILayoutSchema {
   type: string;
   content: IFormSchema;
@@ -13,13 +17,6 @@ export interface ILayoutSchema {
 }
 
 export interface IFormSchema extends Array<IElementSchema | ILayoutSchema> {}
-
-export function registerElement(
-  type: string,
-  render: (props: IElementProps) => ReactElement
-): void {
-  elements[type] = render;
-}
 
 export interface IForm {
   schema: IFormSchema;

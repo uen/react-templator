@@ -4,47 +4,79 @@ import {
   IFormSchema,
   Form,
   registerLayoutElement,
-  registerElement
-} from 'react-form-templator';
+  registerElement,
+  registerElements
+} from './modules/react-form-templator';
 
-registerElement('text-input', (props) => {
-  return (
+// registerElement('text-input', (props) => {
+//   return (
+//     <div>
+//       {props.label}
+//       <input
+//         type='text'
+//         name={props.name}
+//         tabIndex={props.tabIndex}
+//         ref={props.ref}
+//         onChange={(event: FormEvent<HTMLInputElement>) =>
+//           props.onChange(event.currentTarget.value)
+//         }
+//         onBlur={() => props.validate(false)}
+//         // onBlur={() => props.validate(true)}
+//       />
+//       {props.error}
+//     </div>
+//   );
+// });
+
+// registerElement('submit', (props) => {
+//   return (
+//     <input type='submit' value={props.isLoading ? 'loading' : props.name} />
+//   );
+// });
+
+// registerLayoutElement('inline', ({ children }) => {
+//   return (
+//     <div
+//       style={{
+//         flex: 1,
+//         backgroundColor: 'blue',
+//         justifyContent: 'space-between'
+//       }}
+//     >
+//       {children}
+//     </div>
+//   );
+// });
+
+registerElements({
+  'text-input': ({
+    name,
+    label,
+    tabIndex,
+    error,
+    ref,
+    value,
+    onChange,
+    validate,
+    yourProp
+  }) => (
     <div>
-      {props.label}
+      {yourProp} {label}
       <input
         type='text'
-        name={props.name}
-        tabIndex={props.tabIndex}
-        ref={props.ref}
-        onChange={(event: FormEvent<HTMLInputElement>) =>
-          props.onChange(event.currentTarget.value)
-        }
-        onBlur={() => props.validate(false)}
-        // onBlur={() => props.validate(true)}
+        name={name}
+        value={value}
+        tabIndex={tabIndex}
+        ref={ref}
+        onChange={(event) => {
+          onChange(event.currentTarget.value);
+        }}
+        onBlur={() => validate(false)}
       />
-      {props.error}
+      {error}
     </div>
-  );
-});
-
-registerElement('submit', (props) => {
-  return (
-    <input type='submit' value={props.isLoading ? 'loading' : props.name} />
-  );
-});
-
-registerLayoutElement('inline', ({ children }) => {
-  return (
-    <div
-      style={{
-        flex: 1,
-        backgroundColor: 'blue',
-        justifyContent: 'space-between'
-      }}
-    >
-      {children}
-    </div>
-  );
+  ),
+  submit: () => <input type='submit' />
 });
 
 const schema: IFormSchema = [
