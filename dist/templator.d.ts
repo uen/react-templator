@@ -1,8 +1,9 @@
 import React, { ReactElement, ReactNode } from 'react';
 export interface IForm {
     schema: IFormSchema;
-    dynamicProps: Record<string, any>;
+    dynamicProps?: Record<string, any>;
     onSubmit: (values: Record<string, string>, setErrors: (errors: Record<string, string | undefined>) => void) => void;
+    [props: string]: any;
 }
 interface ITemplator extends IForm {
     formElement: (submit: () => void) => ReactElement;

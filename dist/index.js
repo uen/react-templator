@@ -165,9 +165,11 @@ var Templator = React.memo(function (_ref) {
 var elements = {};
 var layoutElements = {};
 function registerElement(type, render) {
+  if (layoutElements[type] || elements[type]) return console.error("Element type '" + type + "' is already registered");
   elements[type] = render;
 }
 function registerLayoutElement(type, render) {
+  if (layoutElements[type] || elements[type]) return console.error("react-templator: Element type '" + type + "' is already registered");
   layoutElements[type] = render;
 }
 

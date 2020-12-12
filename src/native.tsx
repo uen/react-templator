@@ -3,12 +3,12 @@ import { View } from 'react-native';
 
 import {
   Templator,
-  IForm,
   IElementSchema,
   ILayoutSchema,
   IFormSchema,
   registerElement,
-  registerLayoutElement
+  registerLayoutElement,
+  IForm
 } from './templator';
 
 export function Form({ schema, onSubmit, dynamicProps, ...props }: IForm) {

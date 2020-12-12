@@ -12,11 +12,12 @@ import { validators } from './validators';
 
 export interface IForm {
   schema: IFormSchema;
-  dynamicProps: Record<string, any>;
+  dynamicProps?: Record<string, any>;
   onSubmit: (
     values: Record<string, string>,
     setErrors: (errors: Record<string, string | undefined>) => void
   ) => void;
+  [props: string]: any;
 }
 
 interface ITemplator extends IForm {
@@ -216,6 +217,8 @@ export function registerElement(
   type: string,
   render: (props: IElementProps) => ReactElement
 ): void {
+  if (layoutElements[type] || elements[type])
+    return console.error(`Element type '${type}' is already registered`);
   elements[type] = render;
 }
 
@@ -227,6 +230,10 @@ export function registerLayoutElement(
   type: string,
   render: (props: ILayoutProps) => ReactElement
 ): void {
+  if (layoutElements[type] || elements[type])
+    return console.error(
+      `react-templator: Element type '${type}' is already registered`
+    );
   layoutElements[type] = render;
 }
 
