@@ -84,8 +84,20 @@ export const Templator = memo(
         elementErrors && elementErrors.length > 0 && elementErrors[0];
 
       if (setError) {
-        if (refocus && error && context.inputs[element.name].current)
-          context.inputs[element.name].current!.focus();
+        if (refocus) {
+          if (error && context.inputs[element.name].current) {
+            context.inputs[element.name].current!.focus();
+          } else if (!error) {
+            // no errors.. focus on next input
+            const inputs = getInputs(schema);
+            console.log(
+              'NO ERROR REFOCUSING ON INPUT..',
+              inputs.indexOf(element)
+            );
+
+            context.inputs[inputs.indexOf(element) + 1].current!.focus();
+          }
+        }
 
         setErrors({
           ...errors,
@@ -144,7 +156,7 @@ export const Templator = memo(
               (element: ILayoutSchema | IElementSchema, index: number) => {
                 if (!elements[element.type] && !layoutElements[element.type])
                   return console.error(
-                    `react-form-templator: Element ${element.type} has not been registered`
+                    `react-form-templator: Element '${element.type}' has not been registered`
                   );
 
                 if (element.content) {
