@@ -21,7 +21,7 @@
     "babel-preset-es2020": "^1.0.2",
     "react": "link:../node_modules/react",
     "react-dom": "link:../node_modules/react-dom",
-    "react-form-templator": "link:..",
+    "react-form-templator": "https://github.com/uen/react-form-templator",
     "react-scripts": "link:../node_modules/react-scripts",
     "typescript": "link:../node_modules/typescript"
   },

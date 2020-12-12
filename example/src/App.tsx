@@ -5,7 +5,7 @@ import {
   Form,
   registerLayoutElement,
   registerElement
-} from './modules/react-form-templator';
+} from 'react-form-templator';
 
 registerElement('text-input', (props) => {
   return (

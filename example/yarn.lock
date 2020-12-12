@@ -1834,8 +1834,12 @@
     csstype "^3.0.2"
 
 "@types/react@^16":
-  version "0.0.0"
-  uid ""
+  version "16.14.2"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-16.14.2.tgz#85dcc0947d0645349923c04ccef6018a1ab7538c"
+  integrity sha512-BzzcAlyDxXl2nANlabtT4thtvbbnhee8hMmH/CcJrISDBVcJS1iOsP1f0OAgSdGE0MsY9tqcrb9YoZcOFv9dbQ==
+  dependencies:
+    "@types/prop-types" "*"
+    csstype "^3.0.2"
 
 "@types/react@link:../node_modules/@types/react":
   version "0.0.0"
@@ -10428,9 +10432,15 @@ react-error-overlay@^6.0.7:
   resolved "https://registry.yarnpkg.com/react-error-overlay/-/react-error-overlay-6.0.8.tgz#474ed11d04fc6bda3af643447d85e9127ed6b5de"
   integrity sha512-HvPuUQnLp5H7TouGq3kzBeioJmXms1wHy9EGjz2OURWBp4qZO6AfGEcnxts1D/CbwPLRAgTMPCEgYhA3sEM4vw==
 
-"react-form-templator@link:..":
-  version "0.0.0"
-  uid ""
+"react-form-templator@https://github.com/uen/react-form-templator":
+  version "1.0.0"
+  resolved "https://github.com/uen/react-form-templator#3b7e7c2d133d94c678887b0454064d43f21ecdbb"
+  dependencies:
+    "@types/react-native" "^0.63.37"
+    babel-preset-env "^1.7.0"
+    babel-preset-react "^6.24.1"
+    react-native "^0.63.4"
+    yup "^0.32.8"
 
 react-is@^16.12.0, react-is@^16.8.1, react-is@^16.8.4:
   version "16.13.1"
