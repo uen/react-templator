@@ -1,4 +1,6 @@
 import React from 'react';
+import { View } from 'react-native';
+
 import {
   Templator,
   IForm,
@@ -9,20 +11,13 @@ import {
   registerLayoutElement
 } from './templator';
 
-export function Form({ schema, onSubmit, dynamicProps }: IForm) {
+export function Form({ schema, onSubmit, dynamicProps, ...props }: IForm) {
   return (
     <Templator
       onSubmit={onSubmit}
       dynamicProps={dynamicProps}
       schema={schema}
-      formElement={(submit: () => void) => (
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            submit();
-          }}
-        />
-      )}
+      formElement={() => <View {...props} />}
     />
   );
 }
