@@ -8,27 +8,34 @@ import React, {
   useState
 } from 'react';
 
+import {
+  IElementSchema,
+  IForm,
+  IFormSchema,
+  ILayoutSchema
+} from './interfaces';
 import { validators } from './validators';
 
-export interface IForm {
-  schema: IFormSchema;
-  dynamicProps?: Record<string, any>;
-  onSubmit: (
-    values: Record<string, string>,
-    setErrors: (errors: Record<string, string | undefined>) => void
-  ) => void;
-  [props: string]: any;
+interface IElementProps {
+  [data: string]: any;
 }
 
-interface ITemplator extends IForm {
-  formElement: (submit: () => void) => ReactElement;
-}
+const elements: Record<string, (props: IElementProps) => ReactElement> = {};
+
+const layoutElements: Record<
+  string,
+  (props: ILayoutProps) => ReactElement
+> = {};
 
 interface IFormContext {
   values: Record<string, any>;
   errors: Record<string, string | undefined>;
   setValue: (name: string, value: any) => void;
   inputs: Record<string, RefObject<HTMLFormElement>>;
+}
+
+interface ITemplator extends IForm {
+  formElement: (submit: () => void) => ReactElement;
 }
 
 export const Templator = memo(
@@ -58,6 +65,7 @@ export const Templator = memo(
       setError?: boolean,
       refocus?: boolean
     ) {
+      console.log('validaiting');
       const elementErrors = Object.keys(validators)
         .map(
           (validator) =>
@@ -69,8 +77,6 @@ export const Templator = memo(
             )
         )
         .filter((error) => error);
-
-      console.log(elementErrors);
 
       if (element.validator) {
         const customError = element.validator(
@@ -88,14 +94,11 @@ export const Templator = memo(
           if (error && context.inputs[element.name].current) {
             context.inputs[element.name].current!.focus();
           } else if (!error) {
-            // no errors.. focus on next input
             const inputs = getInputs(schema);
-            console.log(
-              'NO ERROR REFOCUSING ON INPUT..',
-              inputs.indexOf(element)
-            );
 
-            context.inputs[inputs.indexOf(element) + 1].current!.focus();
+            context.inputs[
+              inputs[inputs.indexOf(element) + 1].name
+            ].current!.focus();
           }
         }
 
@@ -172,20 +175,19 @@ export const Templator = memo(
 
                 const props = {
                   tabIndex: index + 1,
+                  submit: onFormSubmit,
+                  value: values[formElement.name],
                   error: errors[formElement.name],
                   ref: context.inputs[formElement.name],
-                  ...(dynamicProps[formElement.name]
-                    ? dynamicProps[formElement.name]
-                    : {}),
-
                   validate: (refocus: boolean) =>
                     validateInput(formElement, true, refocus),
-                  submit: onFormSubmit,
                   onChange: (value: any) => {
                     setErrors({ ...errors, [formElement.name]: undefined });
                     context.setValue(formElement.name, value);
                   },
-                  value: values[formElement.name]
+                  ...(dynamicProps[formElement.name]
+                    ? dynamicProps[formElement.name]
+                    : {})
                 };
 
                 return React.cloneElement(
@@ -203,28 +205,6 @@ export const Templator = memo(
   }
 );
 
-export interface IElementSchema {
-  type: string;
-  name: string;
-  label?: string;
-  validator?: (label: string, input: string) => {};
-  [data: string]: any;
-}
-
-export interface ILayoutSchema {
-  type: string;
-  content: IFormSchema;
-  [data: string]: any;
-}
-
-export interface IFormSchema extends Array<IElementSchema | ILayoutSchema> {}
-
-const elements: Record<string, (props: IElementProps) => ReactElement> = {};
-const layoutElements: Record<
-  string,
-  (props: ILayoutProps) => ReactElement
-> = {};
-
 export function registerElement(
   type: string,
   render: (props: IElementProps) => ReactElement
@@ -232,10 +212,21 @@ export function registerElement(
   elements[type] = render;
 }
 
+interface IRegisterElements {
+  [key: string]: (props: IElementProps) => ReactElement;
+}
+
+export function registerElements({ elements }: IRegisterElements) {
+  for (let name of Object.keys(elements)) {
+    registerElement(name, elements[name]);
+  }
+}
+
 interface ILayoutProps {
   children: ReactNode;
   [data: string]: any;
 }
+
 export function registerLayoutElement(
   type: string,
   render: (props: ILayoutProps) => ReactElement
@@ -243,6 +234,12 @@ export function registerLayoutElement(
   layoutElements[type] = render;
 }
 
-interface IElementProps {
-  [data: string]: any;
+interface IRegisterLayoutElements {
+  [key: string]: (props: IElementProps) => ReactElement;
+}
+
+export function registerLayoutElements({ layouts }: IRegisterLayoutElements) {
+  for (let name of Object.keys(layouts)) {
+    registerLayoutElement(name, layouts[name]);
+  }
 }
