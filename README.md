@@ -13,14 +13,14 @@ npm install --save react-form-templator
 ## Usage
 
 ```tsx
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 
-import MyComponent from 'react-form-templator'
-import 'react-form-templator/dist/index.css'
+import MyComponent from 'react-form-templator';
+import 'react-form-templator/dist/index.css';
 
 class Example extends Component {
   render() {
-    return <MyComponent />
+    return <MyComponent />;
   }
 }
 ```

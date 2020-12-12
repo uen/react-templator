@@ -1,49 +1,88 @@
 import React, { memo, useState, createRef, Fragment } from 'react';
 
-const validators = {
-  required: (label, input, _) => !input && `${label} must have a value`,
-  minLength: (label, input, length) => input && input.length < length && `${label} must be at least ${length} characters`,
-  maxLength: (label, input, length) => input && input.length > length && `${label} must not be more than ${length} characters`,
-  number: (label, input, _) => isNaN(input) && `${label} must be a number`
+function _extends() {
+  _extends = Object.assign || function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+
+    return target;
+  };
+
+  return _extends.apply(this, arguments);
+}
+
+var validators = {
+  required: function required(label, input, _) {
+    return !input && label + " must have a value";
+  },
+  minLength: function minLength(label, input, length) {
+    return input && input.length < length && label + " must be at least " + length + " characters";
+  },
+  maxLength: function maxLength(label, input, length) {
+    return input && input.length > length && label + " must not be more than " + length + " characters";
+  },
+  number: function number(label, input, _) {
+    return isNaN(input) && label + " must be a number";
+  }
 };
 
-const Templator = memo(({
-  schema,
-  onSubmit,
-  dynamicProps: _dynamicProps = {},
-  formElement
-}) => {
-  const [values, setValues] = useState({});
-  const [errors, setErrors] = useState({});
-  const context = {
-    values,
-    errors,
-    inputs: schema.reduce((obj, item) => ({ ...obj,
-      [item.name]: createRef()
-    }), {}),
-    setValue: (name, value) => {
-      setValues({ ...values,
-        [name]: value
-      });
+var Templator = memo(function (_ref) {
+  var schema = _ref.schema,
+      onSubmit = _ref.onSubmit,
+      _ref$dynamicProps = _ref.dynamicProps,
+      dynamicProps = _ref$dynamicProps === void 0 ? {} : _ref$dynamicProps,
+      formElement = _ref.formElement;
+
+  var _useState = useState({}),
+      values = _useState[0],
+      setValues = _useState[1];
+
+  var _useState2 = useState({}),
+      errors = _useState2[0],
+      setErrors = _useState2[1];
+
+  var context = {
+    values: values,
+    errors: errors,
+    inputs: schema.reduce(function (obj, item) {
+      var _extends2;
+
+      return _extends({}, obj, (_extends2 = {}, _extends2[item.name] = createRef(), _extends2));
+    }, {}),
+    setValue: function setValue(name, value) {
+      var _extends3;
+
+      setValues(_extends({}, values, (_extends3 = {}, _extends3[name] = value, _extends3)));
     }
   };
 
   function validateInput(element, setError, refocus) {
-    const elementErrors = Object.keys(validators).map(validator => element[validator] && validators[validator](element.label, values[element.name], element[validator])).filter(error => error);
+    var elementErrors = Object.keys(validators).map(function (validator) {
+      return element[validator] && validators[validator](element.label, values[element.name], element[validator]);
+    }).filter(function (error) {
+      return error;
+    });
     console.log(elementErrors);
 
     if (element.validator) {
-      const customError = element.validator(element.label ? element.label : element.name, values[element.name]);
+      var customError = element.validator(element.label ? element.label : element.name, values[element.name]);
       if (customError) elementErrors.push(customError);
     }
 
-    const error = elementErrors && elementErrors.length > 0 && elementErrors[0];
+    var error = elementErrors && elementErrors.length > 0 && elementErrors[0];
 
     if (setError) {
+      var _extends4;
+
       if (refocus && error && context.inputs[element.name].current) context.inputs[element.name].current.focus();
-      setErrors({ ...errors,
-        [element.name]: error ? `${error}` : undefined
-      });
+      setErrors(_extends({}, errors, (_extends4 = {}, _extends4[element.name] = error ? "" + error : undefined, _extends4)));
     }
 
     return {
@@ -53,20 +92,26 @@ const Templator = memo(({
   }
 
   function getInputs(schema) {
-    const inputs = [];
-    schema.forEach(element => {
+    var inputs = [];
+    schema.forEach(function (element) {
       if (element.name) inputs.push(element);
-      if (element.content) inputs.push(...getInputs(element.content));
+      if (element.content) inputs.push.apply(inputs, getInputs(element.content));
     });
     return inputs;
   }
 
   function onFormSubmit() {
-    const errors = getInputs(schema).map(element => validateInput(element)).filter(element => element.error).reduce((obj, item) => ({ ...obj,
-      [item.name]: item.error
-    }), {});
+    var errors = getInputs(schema).map(function (element) {
+      return validateInput(element);
+    }).filter(function (element) {
+      return element.error;
+    }).reduce(function (obj, item) {
+      var _extends5;
+
+      return _extends({}, obj, (_extends5 = {}, _extends5[item.name] = item.error, _extends5));
+    }, {});
     setErrors(errors);
-    const errorFields = Object.keys(errors);
+    var errorFields = Object.keys(errors);
 
     if (errorFields.length > 0) {
       context.inputs[errorFields[0]].current.focus();
@@ -77,34 +122,36 @@ const Templator = memo(({
   }
 
   function renderLayout(schema) {
-    return React.createElement(Fragment, null, schema && schema.map((element, index) => {
-      if (!elements[element.type] && !layoutElements[element.type]) return console.error(`react-form-templator: Element ${element.type} has not been registered`);
+    return React.createElement(Fragment, null, schema && schema.map(function (element, index) {
+      if (!elements[element.type] && !layoutElements[element.type]) return console.error("react-form-templator: Element " + element.type + " has not been registered");
 
       if (element.content) {
-        return React.cloneElement(layoutElements[element.type]({ ...element.content,
+        return React.cloneElement(layoutElements[element.type](_extends({}, element.content, {
           children: renderLayout(element.content)
-        }));
+        })));
       }
 
-      const formElement = element;
-      const props = {
+      var formElement = element;
+
+      var props = _extends({
         tabIndex: index + 1,
         error: errors[formElement.name],
-        ref: context.inputs[formElement.name],
-        ...(_dynamicProps[formElement.name] ? _dynamicProps[formElement.name] : {}),
-        validate: refocus => validateInput(formElement, true, refocus),
+        ref: context.inputs[formElement.name]
+      }, dynamicProps[formElement.name] ? dynamicProps[formElement.name] : {}, {
+        validate: function validate(refocus) {
+          return validateInput(formElement, true, refocus);
+        },
         submit: onFormSubmit,
-        onChange: value => {
-          setErrors({ ...errors,
-            [formElement.name]: undefined
-          });
+        onChange: function onChange(value) {
+          var _extends6;
+
+          setErrors(_extends({}, errors, (_extends6 = {}, _extends6[formElement.name] = undefined, _extends6)));
           context.setValue(formElement.name, value);
         },
         value: values[formElement.name]
-      };
-      return React.cloneElement(elements[formElement.type]({ ...formElement,
-        ...props
-      }));
+      });
+
+      return React.cloneElement(elements[formElement.type](_extends({}, formElement, props)));
     }));
   }
 
@@ -112,32 +159,33 @@ const Templator = memo(({
     children: renderLayout(schema)
   });
 });
-const elements = {};
-const layoutElements = {};
+var elements = {};
+var layoutElements = {};
 function registerElement(type, render) {
-  if (layoutElements[type] || elements[type]) return console.error(`Element type '${type}' is already registered`);
+  if (layoutElements[type] || elements[type]) return console.error("Element type '" + type + "' is already registered");
   elements[type] = render;
 }
 function registerLayoutElement(type, render) {
-  if (layoutElements[type] || elements[type]) return console.error(`react-templator: Element type '${type}' is already registered`);
+  if (layoutElements[type] || elements[type]) return console.error("react-templator: Element type '" + type + "' is already registered");
   layoutElements[type] = render;
 }
 
-function Form({
-  schema,
-  onSubmit,
-  dynamicProps
-}) {
+function Form(_ref) {
+  var schema = _ref.schema,
+      onSubmit = _ref.onSubmit,
+      dynamicProps = _ref.dynamicProps;
   return React.createElement(Templator, {
     onSubmit: onSubmit,
     dynamicProps: dynamicProps,
     schema: schema,
-    formElement: submit => React.createElement("form", {
-      onSubmit: e => {
-        e.preventDefault();
-        submit();
-      }
-    })
+    formElement: function formElement(submit) {
+      return React.createElement("form", {
+        onSubmit: function onSubmit(e) {
+          e.preventDefault();
+          submit();
+        }
+      });
+    }
   });
 }
 
