@@ -1,3 +1,5 @@
+import { ReactNode } from 'react';
+
 export interface IElementSchema {
   type: string;
   name: string;
@@ -12,7 +14,7 @@ export interface IElementProps {
 
 export interface ILayoutSchema {
   type: string;
-  content: IFormSchema;
+  children: IFormSchema;
   [data: string]: any;
 }
 
@@ -26,4 +28,9 @@ export interface IForm {
     setErrors: (errors: Record<string, string | undefined>) => void
   ) => void;
   [props: string]: any;
+}
+
+export interface ILayoutProps {
+  children: ReactNode;
+  [data: string]: any;
 }
