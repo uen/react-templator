@@ -2,15 +2,12 @@
 
 <!-- PROJECT LOGO -->
 <br />
-<p align="center">
 
-  <h1 align="center">React Templator</h3>
+# React Templator
 
-  <p align="center">
-    A small 8kb library for automatic form generation & validation in React & React Native. Define form schemas using your own components and have error handling, layout, auto-refocus and more handled for you.
-</p>
+### A small 8kb library for automatic form generation & validation in React & React Native. Define form schemas using your own components and have error handling, layout, auto-refocus and more handled for you.
 
-<!-- ABOUT THE PROJECT -->
+---
 
 # Overview
 
