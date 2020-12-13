@@ -3,53 +3,54 @@
 <!-- PROJECT LOGO -->
 <br />
 
-<h1> React Templator</h1>
+# React Templator
 
 A small 8kb library for automatic form generation & validation in React & React Native. Define form schemas using your own components and have error handling, layout, auto-refocus and more handled for you.
 
----
-
 # Overview
 
-Creating forms in React & React Native with good UX can be a pain. If you have a form with 20 inputs, that's 20 new values in your state, 20 new refs to get them to autofocus and hundreads of lines of error handling logic. But it shouldn't be this way - your form containers should only be focussed on the business-logic of your form. That's where React Templator comes in.
+Creating forms in React & React Native with good UX can be a pain. If you have a form with 20 inputs, that's 20 new values in your state, and 200 new lines of boilerplate code. But it shouldn't be this way - your form containers should be focussed on the business-logic of your form. That's where React Templator comes in.
 
-React Templator allows you to define a `schema` for each form in your application. This is an array of inputs and layout elements for each form. Once you've defined your input components, your form will automatically be generated with **your components** and all error handling and other 'UX features' will be handled for you.
+React Templator allows you to define a `schema` for each form in your application. This is an array of inputs and layout elements for each form. your form will automatically be generated with your components and all error handling and other 'UX features' will be handled for you.
 
-React Templator is dynamic and does not define any form components, instead you use your own. You simply pass an array of `elements` to `<FormProvider>` and you can use them in your schemas!
+React Templator is dynamic and does not define any form components itself, instead you use your own. Simply pass an array of `elements` to `<FormProvider>` and you can use them in your schemas.
+
+**Check the project in `/example` to view a clean, working example of this library**
 
 # Installation
 
 ```sh
 npm install react-templator
-// or
+# or
 yarn add react-templator
 ```
 
-## Usage
+# Usage
 
-- Deifne a list of components you want to use in your form. You only have to do this once per application.
+- Deifne a list of components you want to use in your form. You only have to do this once per application. Instead of `<input/>` you can use any of your own components, as long as ref points to the real input element (Make sure to use `React.forwardRef`).
 
 ```javascript
 const elements = {
   'text-input': ({
     name,
-    label,
-    tabIndex,
-    error,
-    yourProp,
-    ref,
     value,
-    onChange,
-    validate
+
+    tabIndex, // Element tab index
+    ref, // Ref to your input prop
+    error, // The current field error
+    label, // Used by validators (recommended)
+    yourProp, // Any prop you want to pass through your schema
+    onChange, // Call this with the new value when your input is changed
+    validate // Call this when you want to validate the field. Takes a 'refocus' parameter
   }) => (
     <div>
       {yourProp} {label}
       <input
+        ref={ref}
         type='text'
         name={name}
         value={value}
         tabIndex={tabIndex}
-        ref={ref}
         onChange={(event) => {
           onChange(event.currentTarget.value);
         }}
@@ -58,7 +59,7 @@ const elements = {
       <div className='error'>{error}</div>
     </div>
   ),
-  submit: ({ label, tabIndex, value }) => (
+  submit: ({ label, tabIndex }) => (
     <input type='submit' tabIndex={tabIndex} value={label} />
   )
 };
@@ -69,7 +70,6 @@ const elements = {
 ```javascript
 // app.js
 import { FormProvider } from "react-templator";
-
 import { elements } from "./your-elements";
 
 render(){
@@ -79,7 +79,7 @@ render(){
 }
 ```
 
-- Create a form schema for your form, which defines the inputs in your form. Here, we'll define two text inputs and a submit button.
+- Create a new form schema for your form, which defines all the inputs and their properties of your form. Here, we'll define two text inputs and a submit button.
 
 ```javascript
 const schema = [
@@ -113,7 +113,7 @@ const schema = [
 ];
 ```
 
-- Finally, use the `<Form/>` component and pass it your schema, and onSubmit function.
+- Finally, use the `<Form/>` component and pass it your schema, and a onSubmit function.
 
 ```javascript
 <Form
@@ -132,13 +132,15 @@ This is the result of our example:
 
 This is nice for static forms, but what about forms that require custom properties such as loading states & custom data & errors from a server?
 
-React Templator handles this functionality with `dynamicProps`. Simply pass a `dynamicProps` prop to the `<Form/>`, which is a {"input-name": props} object, to have different props automatically passed to your component. In the following example, we'll define a new Select component with custom data and also add a loading state to our button.
+React Templator handles this functionality with `dynamicProps`. Simply pass a `dynamicProps` prop to the `<Form/>`, which is a `{"input-name": props}` object to have different props automatically passed to your component.
+
+- In the following example, we'll define a new Select component with custom data and also add a loading state to our button.
 
 ```javascript
 const elements = {
-  // ..Your other inputs
+  // ... Other inputs
 
-  'select': ({
+  select: ({
     ref,
     name,
     label,
@@ -149,7 +151,7 @@ const elements = {
     onChange,
 
     // Dynamic props
-    options=[]
+    options = []
   }) => (
     <div>
       {label}
@@ -158,45 +160,45 @@ const elements = {
         onBlur={() => validate(false)}
         onChange={(event) => {
           onChange(event.currentTarget.value);
-        }
-      }>
+        }}
+      >
         {options.map((option) => (
-          <option value={option.value}>
-            {option.label}
-          </option>
+          <option value={option.value}>{option.label}</option>
         ))}
       </select>
 
-      <div className="error">{error}</div>
+      <div className='error'>{error}</div>
     </div>
   ),
-
   submit: ({
     label,
     value,
     tabIndex,
 
     // Dynamic props
-    isLoading,
+    isLoading
   }) => (
     <input
       type='submit'
       tabIndex={tabIndex}
-      value={isLoading ? "Loading..." : label}
+      value={isLoading ? 'Loading...' : label}
     />
   )
+};
 ```
 
-- And we'll modify our schema to add our new select component
+- W'll modify our schema to add our new select component
 
 ```javascript
 const schema = [
+  ...
   {
     type: 'select',
     name: 'fave_color',
     label: 'Favourite color',
     required: true
   }
+  ...
 ];
 ```
 
@@ -238,7 +240,7 @@ const [isLoading, setIsLoading] = useState();
 
 ## Layout elements
 
-Wha if you don't want a simple list of elements in your form, and instead want a form with a different layout, such as two field snext to eachother, or different section labels? This is where `layoutElements` come in.
+What if you don't want a simple list of elements in your form, and instead want a form with a different layout, such as two fields next to eachother, or different section labels? This is where `layoutElements` come in.
 
 You can define layout elements which can have unlimited nested form inputs / other form layouts! Layouts can also have custom props passed into them from the schema, just like form inputs.
 
@@ -341,7 +343,7 @@ const schema = {
 }
 ```
 
-- This will validate that the input value is an object with a "some-property" property.
+This will validate that the input value is an object with a "some-property" property.
 
 ### Specific element validators
 
@@ -353,7 +355,7 @@ const schema = [
     type: 'text-input',
     name: 'last_name',
     label: 'Last name',
-    validator: (name, value) => name !== "hello" && `${name} must he 'hello'`
+    validator: (name, value) => name !== "hello" && `${name} must be 'hello'`
   }
 ]
 ```
@@ -364,11 +366,11 @@ Since React Templator comes with no UI components, using the library with React 
 
 - Instead of the `<Form/>` component, be sure to use the `<FormNative>`
 
-- Instead of using `onBlur` to validate your components, use `onSubmitEditing` and pass `true` to validate (refocus input).
+- Instead of using `onBlur` to validate your components, use `onSubmitEditing` and pass `true` to validate (refocus input on error).
 
 - Since React Native doesn't have the concept of forms or submitting them, you need to add some extra logic to your submit button component to get it to submit the form. Every element in your schema is passed a `submit` property, which you can use to submit your form. For example:
 
-```
+```javascript
 const elements = {
   "submit": ({submit}) => (
     <TouchableOpacity onPress={submit}><Text>Submit</Text>
