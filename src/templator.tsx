@@ -86,26 +86,23 @@ export const Templator = memo(
     const context: IFormContext = {
       values,
       errors,
-      inputs: getInputs(schema).reduce((obj, item) => {
-        console.log('item is', item);
-        return {
+      inputs: getInputs(schema).reduce(
+        (obj, item) => ({
           ...obj,
           [item.name]: createRef()
-        };
-      }, {}),
+        }),
+        {}
+      ),
       setValue: (name: string, value: any) => {
         setValues({ ...values, [name]: value });
       }
     };
-
-    console.log('FORM CONTEXT IS', context);
 
     function validateInput(
       element: IElementSchema,
       setError?: boolean,
       refocus?: boolean
     ) {
-      console.log('validaiting');
       const elementErrors = Object.keys(validators)
         .map(
           (validator) =>
@@ -185,15 +182,6 @@ export const Templator = memo(
       const errorFields = Object.keys(errors);
 
       if (errorFields.length > 0) {
-        console.log(
-          'the currewnt error field is',
-          errorFields[0],
-          'which has input',
-          context.inputs,
-          'and all error fields',
-          context.inputs[errorFields[0]]
-        );
-
         if (context.inputs[errorFields[0]])
           context.inputs[errorFields[0]].current!.focus();
         return;
@@ -226,13 +214,6 @@ export const Templator = memo(
               }
 
               const formElement = element as IElementSchema;
-
-              console.log(
-                'ydnamic props for elements',
-                formElement.name,
-                dynamicProps[formElement.name]
-              );
-
               const props = {
                 tabIndex: indexCounter,
                 submit: onFormSubmit,

@@ -4,6 +4,8 @@ import {
   IElementSchema,
   IFormSchema,
   ILayoutSchema,
+  ILayoutProps,
+  IElementProps,
   IForm
 } from './interfaces';
 
@@ -44,5 +46,11 @@ export function Form({ schema, onSubmit, dynamicProps, ...props }: IForm) {
 //   );
 // }
 
-export type { IElementSchema, ILayoutSchema, IFormSchema };
+export type {
+  IElementSchema,
+  ILayoutSchema,
+  IFormSchema,
+  ILayoutProps,
+  IElementProps
+};
 export { FormProvider };
