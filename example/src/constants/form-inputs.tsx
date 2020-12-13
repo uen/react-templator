@@ -2,7 +2,7 @@ import { ReactElement } from 'react';
 import { selectInput } from '../components/SelectInput';
 import { submitInput } from '../components/SubmitInput';
 import { textInput } from '../components/TextInput';
-import { IElementProps } from '../modules/react-form-templator/src/interfaces';
+import { IElementProps } from 'react-templator';
 
 export const ELEMENTS: Record<
   string,

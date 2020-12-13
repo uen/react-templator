@@ -212,7 +212,7 @@ export const Templator = memo(
 
               if (!elements[element.type] && !layoutElements[element.type])
                 return console.error(
-                  `react-form-templator: Element '${element.type}' has not been registered`
+                  `react-templator: Element '${element.type}' has not been registered`
                 );
 
               if (element.children) {

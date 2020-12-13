@@ -1,5 +1,5 @@
 {
-  "name": "react-form-templator-example",
+  "name": "react-templator-example",
   "homepage": ".",
   "version": "0.0.0",
   "private": true,
@@ -22,7 +22,7 @@
     "bulma": "^0.9.1",
     "react": "link:../node_modules/react",
     "react-dom": "link:../node_modules/react-dom",
-    "react-form-templator": "https://github.com/uen/react-form-templator",
+    "react-templator": "https://github.com/uen/react-templator",
     "react-native": "^0.63.4",
     "react-scripts": "link:../node_modules/react-scripts",
     "typescript": "link:../node_modules/typescript"

@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import { IElementProps } from '../modules/react-form-templator/src/interfaces';
+import { IElementProps } from 'react-templator';
 
 export const textInput = ({
   ref,

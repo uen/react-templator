@@ -1,4 +1,4 @@
-import { IFormSchema } from '../modules/react-form-templator/src';
+import { IFormSchema } from 'react-templator';
 
 export const FORM_SCHEMA: IFormSchema = [
   {

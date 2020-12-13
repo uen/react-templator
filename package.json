@@ -1,10 +1,10 @@
 {
-  "name": "react-form-templator",
-  "version": "1.0.0",
+  "name": "react-templator",
+  "version": "1.0.1",
   "description": "Generate interactive forms using a schema",
   "author": "uen",
   "license": "MIT",
-  "repository": "uen/react-form-templator",
+  "repository": "uen/react-templator",
   "main": "dist/index.js",
   "module": "dist/index.modern.js",
   "source": "src/index.tsx",

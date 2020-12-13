@@ -4,7 +4,7 @@ import { ELEMENTS } from './constants/form-inputs';
 import { LAYOUT_ELEMENTS } from './constants/layout-elements';
 
 import 'bulma/css/bulma.css';
-import { Form, FormProvider } from './modules/react-form-templator';
+import { Form, FormProvider } from 'react-templator';
 
 const App = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
