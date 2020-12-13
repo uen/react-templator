@@ -14,7 +14,12 @@
 
 ## Justification
 
-Are you tired of doing this every time you want a nice, dynamic form in React?
+Creating dynamic forms in React & React Native cna be a pain.
+
+- Do you want to use your own components?
+- Creating dynamic, validated forms can be a pain. How many times have oyu done
+  It can be dif
+  Are you tired of doing this every time you want a nice, dynamic form in React?
 
 ```typescript
 const cityRef = useRef<TextInput>(null);
@@ -256,20 +261,33 @@ Now when we render our `<Form/>` component, we can proide it with a `dynamicProp
 const [isLoading, setIsLoading] = useState();
 
 <Form
-	schema={schema}
-    onSubmit={(
-       	data: Record<string, any>,
-        setErrors: (errors: Record<string, string>) => void
-    ) => {
-      setIsLoading(true);
+  schema={schema}
+  dynamicProps={{
+    fave_color: { colors },
+    submit: {
+      isLoading
+    }
+  }}
+  onSubmit={(
+    data: Record<string, any>,
+    setErrors: (errors: Record<string, string>) => void
+  ) => {
+    // console.log('on submit', data);
+    setIsLoading(true);
 
-      setTimeout(() => )
+    setTimeout(() => {
+      setIsLoading(false);
 
-    	// This is called when the form has submitted and all the local validation has passed
-        alert("Form submitted! Data:", JSON.stringify(data));
-    }}
- />
+      if (data.last_name !== 'vrondakis') {
+        return setErrors({
+          last_name: "Last name must be 'vrondakis'"
+        });
+      }
 
+      alert(`Form submitted! Data: ${JSON.stringify(data)}`);
+    }, 2000);
+  }}
+/>;
 ```
 
 The result of the previous is:
@@ -374,9 +392,30 @@ The result of our example is this:
 
 ### Provider-wide validators
 
+You can provide a `validators` object to your `<FormProvider/>` to define your own validators which can be used on any element in your schema. For example:
+
+```
+<FormProvider elements={elements} validators={{
+  "has-property": (name, value, data) => !value || !value[data] ? `${name} must have ${data}`
+}}/>
+```
+
+Then you can use it in your schema:
+
+```
+const schema = {
+  {
+    type: 'text-input',
+    name: 'last_name',
+    label: 'Last name',
+    "has-property": "some-property"
+  }
+}
+```
+
 ### Specific element validators
 
-Each element in a schema can also provide its own validator through the use of the `validator` property, which takes a function with parameters of name, validator function. If this function returns something, it is treated as an error.
+Each element in a schema can also provide its own validator through the use of the `validator` property, which takes a function with parameters of `name, value` validator function. This function can return `false` if there is no error, and `string` if there is an error error.
 
 ```
 const schema = [
@@ -384,33 +423,28 @@ const schema = [
     type: 'text-input',
     name: 'last_name',
     label: 'Last name',
-
-    yourProp: 'Another: ',
-
-    required: true
+    validator: (name, value) => name !== "hello" && `${name} must he 'hello'`
   }
 ]
 ```
 
-<!-- ROADMAP -->
+## React Native
 
-## Roadmap
+Since React Templator comes with no UI components, using the library with React Native is just as easy as React, with a few differences.
 
-See the [open issues](https://github.com/github_username/repo_name/issues) for a list of proposed features (and known issues).
+- Instead of the `<Form/>` component, be sure to use the `<FormNative>`
 
-<!-- CONTRIBUTING -->
+- Instead of using `onBlur` to validate your components, use `onSubmitEditing` and pass `true` to validate (refocus input). For example:
 
-## Contributing
+- Since React Native doesn't have the concept of forms or submitting them, you need to add some extra logic to your submit button component to get it to submit the form. Every element in your schema is passed a `submit` property, which you can use to submit your form. For example:
 
-Contributions are what make the open source community such an amazing place to be learn, inspire, and create. Any contributions you make are **greatly appreciated**.
-
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-<!-- LICENSE -->
+```
+const elements = {
+  "submit": ({submit}) => (
+    <TouchableOpacity onPress={submit}><Text>Submit</Text>
+  )
+}
+```
 
 ## License
 
@@ -420,30 +454,4 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 ## Contact
 
-Your Name - [@twitter_handle](https://twitter.com/twitter_handle) - email
-
-Project Link: [https://github.com/github_username/repo_name](https://github.com/github_username/repo_name)
-
-<!-- ACKNOWLEDGEMENTS -->
-
-## Acknowledgements
-
-- []()
-- []()
-- []()
-
-<!-- MARKDOWN LINKS & IMAGES -->
-<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-
-[contributors-shield]: https://img.shields.io/github/contributors/github_username/repo.svg?style=for-the-badge
-[contributors-url]: https://github.com/github_username/repo/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/github_username/repo.svg?style=for-the-badge
-[forks-url]: https://github.com/github_username/repo/network/members
-[stars-shield]: https://img.shields.io/github/stars/github_username/repo.svg?style=for-the-badge
-[stars-url]: https://github.com/github_username/repo/stargazers
-[issues-shield]: https://img.shields.io/github/issues/github_username/repo.svg?style=for-the-badge
-[issues-url]: https://github.com/github_username/repo/issues
-[license-shield]: https://img.shields.io/github/license/github_username/repo.svg?style=for-the-badge
-[license-url]: https://github.com/github_username/repo/blob/master/LICENSE.txt
-[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: https://linkedin.com/in/github_username
+Manolis Vrondakis - [@vrondakis](https://twitter.com/vrondakis) - manolisvrondakis@gmail.com

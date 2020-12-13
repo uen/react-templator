@@ -19,16 +19,21 @@ import {
   ILayoutSchema
 } from './interfaces';
 
-import { validators } from './validators';
+import { validators as defaultValidators } from './validators';
 
 interface FormContext {
   elements?: Record<string, (props: IElementProps) => ReactElement>;
   layoutElements?: Record<string, (props: ILayoutProps) => ReactElement>;
+  validators?: Record<
+    string,
+    (label: string, input: any, length: any) => string | false
+  >;
 }
 
 const formContext = createContext<FormContext>({
   elements: {},
-  layoutElements: {}
+  layoutElements: {},
+  validators: {}
 });
 
 interface IFormProvider extends FormContext {
@@ -38,10 +43,17 @@ interface IFormProvider extends FormContext {
 export function FormProvider({
   elements = {},
   layoutElements = {},
+  validators = {},
   children
 }: IFormProvider) {
   return (
-    <formContext.Provider value={{ elements, layoutElements }}>
+    <formContext.Provider
+      value={{
+        elements,
+        layoutElements,
+        validators: { ...defaultValidators, ...validators }
+      }}
+    >
       {children}
     </formContext.Provider>
   );
@@ -65,7 +77,11 @@ export const Templator = memo(
       {}
     );
 
-    const { layoutElements = {}, elements = {} } = useContext(formContext);
+    const {
+      layoutElements = {},
+      elements = {},
+      validators = { defaultValidators }
+    } = useContext(formContext);
 
     const context: IFormContext = {
       values,
