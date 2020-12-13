@@ -1,8 +1,5 @@
 ![React Templator Logo](https://i.imgur.com/3GT3syb.png)
 
-<!-- PROJECT LOGO -->
-<br />
-
 # React Templator
 
 A small 8kb library for automatic form generation & validation in React & React Native. Define form schemas using your own components and have error handling, layout, auto-refocus and more handled for you.
@@ -15,7 +12,9 @@ React Templator allows you to define a `schema` for each form in your applicatio
 
 React Templator is dynamic and does not define any form components itself, instead you use your own. Simply pass an array of `elements` to `<FormProvider>` and you can use them in your schemas.
 
-**Check the project in `/example` to view a clean, working example of this library**
+**Check the project in `/example` to view a working example of this library, or check the [hosted version](http://uen.github.io/react-templator)**
+
+![React Templator example](https://i.imgur.com/8ZMIQt3.gif)
 
 # Installation
 
@@ -270,26 +269,25 @@ const layoutElements = {
 
 - You can now use your new layout element in your form schema.
 
-```
+```javascript
 const schema: IFormSchema = [
-  ...
-  {
-    type: "section",
-    yourProp: "Your dog",
+  ...{
+    type: 'section',
+    yourProp: 'Your dog',
     children: [
       {
-          type: 'text-input',
-          name: 'dog-name',
-          label: 'Name',
-          required: true
-        },
+        type: 'text-input',
+        name: 'dog-name',
+        label: 'Name',
+        required: true
+      },
 
-              {
-          type: 'text-input',
-          name: 'breed',
-          label: 'Breed',
-          required: true
-        },
+      {
+        type: 'text-input',
+        name: 'breed',
+        label: 'Breed',
+        required: true
+      }
     ]
   },
   {
@@ -307,7 +305,7 @@ The result of our example is this:
 
 ### Default validators
 
-```
+```javascript
 "required"          => Requires the value to be there
 "number"            => Requires the value to be a number
 "minLength": 4      => Requires the value to be at least 4 characters
@@ -320,7 +318,7 @@ You can provide a `validators` object to your `<FormProvider/>` to define your o
 
 - This example defines a validator which an expects an object with a specific property:
 
-```
+```javascript
 const validators = {
   "has-property": (name, value, data) => !value || !value[data] ? `${name} must have ${data}`
 }
@@ -332,7 +330,7 @@ const validators = {
 
 - Then you can use it in your schema:
 
-```
+```javascript
 const schema = {
   {
     type: 'text-input',
@@ -349,15 +347,15 @@ This will validate that the input value is an object with a "some-property" prop
 
 Each element in a schema can also provide its own validator through the use of the `validator` property, which takes a function with parameters of `validator name` and `validatior function`. This function should return `false` if there is no error, and `string` if there is an error.
 
-```
+```javascript
 const schema = [
   {
     type: 'text-input',
     name: 'last_name',
     label: 'Last name',
-    validator: (name, value) => name !== "hello" && `${name} must be 'hello'`
+    validator: (name, value) => name !== 'hello' && `${name} must be 'hello'`
   }
-]
+];
 ```
 
 # Usage with React Native
@@ -378,11 +376,15 @@ const elements = {
 }
 ```
 
+# Notes
+
+- What's the difference between this and other form libraries such as **Formik**?
+
+React Templator allows you to define your components once and use them in anywhere in multiple schemas. This leads to less boilerplate and also has other advantages - you don't have to define your schema your app, you could load it dynically from an API as JSON, or generate it on the fly.
+
 ## License
 
 Distributed under the MIT License. See `LICENSE` for more information.
-
-<!-- CONTACT -->
 
 ## Contact
 

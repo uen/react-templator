@@ -1,5 +1,18 @@
-This example was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# React Templator Example
 
-It is linked to the react-form-templator package in the parent directory for development purposes.
+A working example of the React Templator library in TypeScript.
 
-You can run `yarn install` and then `yarn start` to test your package.
+## Overview
+
+- Inputs and layout components are in `/src/components/`
+- The form schema is defined in `/src/constants/form.tsx`
+- The form elements are defined in `/src/constants/form-inputs.tsx`
+- The form layouts (section) are defined in `/src/constants/layout-elements.tsx`
+- The app itself is defined in `/src/app.tsx`
+
+## Usage
+
+```
+npm install
+npm start
+```

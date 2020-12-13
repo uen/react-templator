@@ -86,17 +86,19 @@ export const Templator = memo(
     const context: IFormContext = {
       values,
       errors,
-      inputs: schema.reduce(
-        (obj, item) => ({
+      inputs: getInputs(schema).reduce((obj, item) => {
+        console.log('item is', item);
+        return {
           ...obj,
           [item.name]: createRef()
-        }),
-        {}
-      ),
+        };
+      }, {}),
       setValue: (name: string, value: any) => {
         setValues({ ...values, [name]: value });
       }
     };
+
+    console.log('FORM CONTEXT IS', context);
 
     function validateInput(
       element: IElementSchema,
@@ -181,70 +183,82 @@ export const Templator = memo(
 
       setErrors(errors);
       const errorFields = Object.keys(errors);
+
       if (errorFields.length > 0) {
-        context.inputs[errorFields[0]]!.current!.focus();
+        console.log(
+          'the currewnt error field is',
+          errorFields[0],
+          'which has input',
+          context.inputs,
+          'and all error fields',
+          context.inputs[errorFields[0]]
+        );
+
+        if (context.inputs[errorFields[0]])
+          context.inputs[errorFields[0]].current!.focus();
         return;
       }
 
       onSubmit(values, setErrors);
     }
 
+    let indexCounter = 1;
     function renderLayout(schema: IFormSchema) {
       return (
         <Fragment>
           {schema &&
-            schema.map(
-              (element: ILayoutSchema | IElementSchema, index: number) => {
-                if (!elements[element.type] && !layoutElements[element.type])
-                  return console.error(
-                    `react-form-templator: Element '${element.type}' has not been registered`
-                  );
+            schema.map((element: ILayoutSchema | IElementSchema) => {
+              indexCounter++;
 
-                if (element.children) {
-                  return React.cloneElement(
-                    layoutElements[element.type]({
-                      ...element.children,
-                      ...element,
-                      children: renderLayout(element.children)
-                    })
-                  );
-                }
-
-                const formElement = element as IElementSchema;
-
-                console.log(
-                  'ydnamic props for elements',
-                  formElement.name,
-                  dynamicProps[formElement.name]
+              if (!elements[element.type] && !layoutElements[element.type])
+                return console.error(
+                  `react-form-templator: Element '${element.type}' has not been registered`
                 );
 
-                const props = {
-                  tabIndex: index + 1,
-                  submit: onFormSubmit,
-                  value: values[formElement.name],
-                  error: errors[formElement.name],
-                  ref: context.inputs[formElement.name],
-                  validate: (refocus: boolean) =>
-                    validateInput(formElement, true, refocus),
-                  onChange: (value: any) => {
-                    setErrors({ ...errors, [formElement.name]: undefined });
-                    context.setValue(formElement.name, value);
-                  },
-                  ...(dynamicProps[formElement.name]
-                    ? dynamicProps[formElement.name]
-                    : {})
-                };
-
-                if (!elements[formElement.type])
-                  return console.error(
-                    `react-templator: Element ${formElement.type} does not exist!`
-                  );
-
+              if (element.children) {
                 return React.cloneElement(
-                  elements[formElement.type]({ ...formElement, ...props })
+                  layoutElements[element.type]({
+                    ...element.children,
+                    ...element,
+                    children: renderLayout(element.children)
+                  })
                 );
               }
-            )}
+
+              const formElement = element as IElementSchema;
+
+              console.log(
+                'ydnamic props for elements',
+                formElement.name,
+                dynamicProps[formElement.name]
+              );
+
+              const props = {
+                tabIndex: indexCounter,
+                submit: onFormSubmit,
+                value: values[formElement.name],
+                error: errors[formElement.name],
+                ref: context.inputs[formElement.name],
+                validate: (refocus: boolean) =>
+                  validateInput(formElement, true, refocus),
+                onChange: (value: any) => {
+                  setErrors({ ...errors, [formElement.name]: undefined });
+                  context.setValue(formElement.name, value);
+                },
+                ...(dynamicProps[formElement.name]
+                  ? dynamicProps[formElement.name]
+                  : {})
+              };
+
+              if (!elements[formElement.type])
+                return console.error(
+                  `react-templator: Element ${formElement.type} does not exist!`
+                );
+
+              return React.cloneElement(
+                elements[formElement.type]({ ...formElement, ...props })
+              );
+            })}
         </Fragment>
       );
     }

@@ -6,8 +6,6 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-
-  padding: 20px;
 }
 
 code {
@@ -16,10 +14,12 @@ code {
 }
 
 input[type='text'],
+.select,
 select {
-  margin-left: 10px;
-  margin-right: 10px;
-  width: 200px;
+  width: 100%;
+  /* margin-left: 10px; */
+  /* margin-right: 10px; */
+  /* width: 200px; */
 }
 
 input[type='submit'] {
