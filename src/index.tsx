@@ -11,10 +11,17 @@ import {
 
 import { Templator, FormProvider } from './templator';
 
-export function Form({ schema, onSubmit, dynamicProps, ...props }: IForm) {
+export function Form({
+  schema,
+  defaultValues,
+  onSubmit,
+  dynamicProps,
+  ...props
+}: IForm) {
   return (
     <Templator
       onSubmit={onSubmit}
+      defaultValues={defaultValues}
       dynamicProps={dynamicProps}
       schema={schema}
       formElement={(submit: () => void) => (

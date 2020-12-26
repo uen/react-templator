@@ -71,8 +71,15 @@ interface ITemplator extends IForm {
 }
 
 export const Templator = memo(
-  ({ schema, onSubmit, dynamicProps = {}, formElement }: ITemplator) => {
-    const [values, setValues] = useState<Record<string, any>>({});
+  ({
+    schema,
+    onSubmit,
+    defaultValues = {},
+    dynamicProps = {},
+    formElement
+  }: ITemplator) => {
+    const [values, setValues] = useState<Record<string, any>>(defaultValues);
+    console.log('form values r', values);
     const [errors, setErrors] = useState<Record<string, string | undefined>>(
       {}
     );

@@ -22,9 +22,9 @@
     "bulma": "^0.9.1",
     "react": "link:../node_modules/react",
     "react-dom": "link:../node_modules/react-dom",
-    "react-templator": "https://github.com/uen/react-templator",
     "react-native": "^0.63.4",
     "react-scripts": "link:../node_modules/react-scripts",
+    "react-templator": "^1.0.3",
     "typescript": "link:../node_modules/typescript"
   },
   "devDependencies": {

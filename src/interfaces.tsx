@@ -22,6 +22,7 @@ export interface IFormSchema extends Array<IElementSchema | ILayoutSchema> {}
 
 export interface IForm {
   schema: IFormSchema;
+  defaultValues?: Record<string, string>;
   dynamicProps?: Record<string, any>;
   onSubmit: (
     values: Record<string, string>,
