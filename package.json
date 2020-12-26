@@ -1,6 +1,6 @@
 {
   "name": "react-templator",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Generate interactive forms using a schema",
   "author": "uen",
   "license": "MIT",
