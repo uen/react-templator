@@ -79,7 +79,6 @@ export const Templator = memo(
     formElement
   }: ITemplator) => {
     const [values, setValues] = useState<Record<string, any>>(defaultValues);
-    console.log('form values r', values);
     const [errors, setErrors] = useState<Record<string, string | undefined>>(
       {}
     );
@@ -189,7 +188,7 @@ export const Templator = memo(
       const errorFields = Object.keys(errors);
 
       if (errorFields.length > 0) {
-        if (context.inputs[errorFields[0]])
+        if (context.inputs[errorFields[0]]?.current)
           context.inputs[errorFields[0]].current!.focus();
         return;
       }
