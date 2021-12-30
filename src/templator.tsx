@@ -193,7 +193,7 @@ export const Templator = memo(
         return;
       }
 
-      onSubmit(values, setErrors);
+      onSubmit(values, (errors) => setErrors(errors || {}));
     }
 
     let indexCounter = 1;
@@ -223,8 +223,8 @@ export const Templator = memo(
               const props = {
                 tabIndex: indexCounter,
                 submit: onFormSubmit,
-                value: values[formElement.name],
-                error: errors[formElement.name],
+                value: (values ?? {})[formElement.name],
+                error: (errors ?? {})[formElement.name],
                 ref: context.inputs[formElement.name],
                 validate: (refocus: boolean) =>
                   validateInput(formElement, true, refocus),
