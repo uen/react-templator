@@ -1,0 +1,6 @@
+{
+  "name": "react-templator/native",
+  "private": true,
+  "main": "./dist/native.tsx.js",
+  "module": "./dist/native.tsx.js"
+}
