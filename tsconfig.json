@@ -10,6 +10,7 @@
     "esModuleInterop": true,
     "noImplicitReturns": true,
     "noImplicitThis": true,
+    "rootDir": "src",
     "noImplicitAny": true,
     "strictNullChecks": true,
     "suppressImplicitAnyIndexErrors": true,
